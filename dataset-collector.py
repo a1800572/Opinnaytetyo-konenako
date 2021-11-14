@@ -1,8 +1,18 @@
 import cv2
-
+import os
 username = input("Enter ip-camera username: ")
 password = input("Enter ip-camera password: ")
 cameraip = "192.168.10.39:88"
+paakansio = "Kuvat"
+
+#pääkansion luominen
+if not os.path.exists(paakansio):
+    print("Kansio nimeltä: " + paakansio + " ei ole olemassa...")
+    print("Luodaan kansiota nimeltä: " + paakansio)
+    os.makedirs(paakansio)
+else:
+    print("Kansio nimeltä: " + paakansio + " on jo olemassa")
+
 #yhteys ip kameraan
 cap = cv2.VideoCapture("rtsp://" + username + ":" + password + "@" + cameraip + "/videoSub")
 #jos primaarinen kamera ei ole saatavilla yhdistetään sekundääriseen kameraan
