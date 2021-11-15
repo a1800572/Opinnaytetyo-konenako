@@ -4,6 +4,8 @@ username = input("Enter ip-camera username: ")
 password = input("Enter ip-camera password: ")
 cameraip = "192.168.10.39:88"
 paakansio = "Kuvat"
+alakansio = input("Syötä alakansion nimi: ")
+alakansioninkramentti = 1
 
 #pääkansion luominen
 if not os.path.exists(paakansio):
@@ -12,6 +14,16 @@ if not os.path.exists(paakansio):
     os.makedirs(paakansio)
 else:
     print("Kansio nimeltä: " + paakansio + " on jo olemassa")
+
+#alakansion luominen, uudellen nimeäminen
+if not os.path.exists(paakansio+"/"+alakansio):
+    os.makedirs(paakansio + "/" + alakansio)
+    print("Luodaan alakansiota nimeltä: " + alakansio + "...")
+else:
+    while os.path.exists(paakansio + "/" + alakansio + (str(alakansioninkramentti))):
+        alakansioninkramentti += 1
+    os.makedirs(paakansio+"/"+alakansio + (str(alakansioninkramentti)))
+    print("Alakansio: " + alakansio + " on olemassa, uudelleen nimetään kansio nimellä: " + alakansio + (str(alakansioninkramentti)))
 
 #yhteys ip kameraan
 cap = cv2.VideoCapture("rtsp://" + username + ":" + password + "@" + cameraip + "/videoSub")
