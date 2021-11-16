@@ -34,14 +34,26 @@ if cap is None or not cap.isOpened():
 else:
     print("Ip-kamera saatavilla, yhdistetään ip-kameraan")
 
+kuvainkramentti = 0
 #luodaan while loop, joka jatkuu ikuisesti, eli kamera yhteys pysyy auki
 while True:
     ret, frame = cap.read()
-    #nimetään kamera ikkuna, määritellään visuaalisen datan tulolähde
+    # nimetään kamera ikkuna, määritellään visuaalisen datan tulolähde
     cv2.imshow("kameranäkymä", frame)
-    #käyttäjä voi katkaista while loopin painamalla näppäimistön q painiketta
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if os.path.exists(paakansio+"/"+alakansio+(str(alakansioninkramentti))):
+        kuvanimi = paakansio + "/" + alakansio + (str(alakansioninkramentti)) + "/%d.jpg" % kuvainkramentti
+    else:
+        kuvanimi = paakansio + "/" + alakansio + "/%d.jpg" % kuvainkramentti
+    cv2.imwrite(kuvanimi, frame)
+    kuvainkramentti += 1
+    # käyttäjä voi katkaista while loopin painamalla näppäimistön q painiketta
+    if kuvainkramentti == 2 or cv2.waitKey(1) & 0xFF == ord('q'):
         break
+#konsoli viesti kuvien sijainnista
+if os.path.exists(paakansio+"/"+alakansio+(str(alakansioninkramentti))):
+    print("Kuvat luotu kansioon: " +alakansio+(str(alakansioninkramentti)))
+else:
+    print("Kuvat luotu kansioon: " + alakansio)
 # jos while loop katkaistaan kamera näkymä sammutetaan
 cap.release()
 cv2.destroyAllWindows()
