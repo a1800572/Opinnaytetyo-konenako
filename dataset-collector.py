@@ -6,6 +6,9 @@ cameraip = "192.168.10.39:88"
 paakansio = "Kuvat"
 alakansio = input("Syötä alakansion nimi: ")
 alakansioninkramentti = 1
+haluttukuvamaara = input("Syötä tallennettavien kuvien lukumäärä: ")
+kuvienkokonaismaara = 0
+alakansioidenkokonaismaara = 0
 
 #pääkansion luominen
 if not os.path.exists(paakansio):
@@ -34,7 +37,14 @@ if cap is None or not cap.isOpened():
 else:
     print("Ip-kamera saatavilla, yhdistetään ip-kameraan")
 
-kuvainkramentti = 0
+#dynaaminen kuvien nimeäminen, kuvien lukumäärän selvittäminen
+for polku, kansiot, tiedostot in os.walk(paakansio):
+    kuvienkokonaismaara += len(tiedostot)
+    alakansioidenkokonaismaara += len(kansiot)
+    kuvainkramentti = kuvienkokonaismaara
+print(paakansio + " kansio sisältää: " + (str(alakansioidenkokonaismaara)) + " alakansiota")
+print("Alakansiot sisältävät: " + (str(kuvienkokonaismaara)) + " kuvaa")
+
 #luodaan while loop, joka jatkuu ikuisesti, eli kamera yhteys pysyy auki
 while True:
     ret, frame = cap.read()
@@ -47,7 +57,7 @@ while True:
     cv2.imwrite(kuvanimi, frame)
     kuvainkramentti += 1
     # käyttäjä voi katkaista while loopin painamalla näppäimistön q painiketta
-    if kuvainkramentti == 2 or cv2.waitKey(1) & 0xFF == ord('q'):
+    if kuvainkramentti == int(haluttukuvamaara) + int(kuvienkokonaismaara) or cv2.waitKey(1) & 0xFF == ord('q'):
         break
 #konsoli viesti kuvien sijainnista
 if os.path.exists(paakansio+"/"+alakansio+(str(alakansioninkramentti))):
