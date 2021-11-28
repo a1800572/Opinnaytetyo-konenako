@@ -13,8 +13,16 @@ if cap is None or not cap.isOpened():
 else:
     print("Ip-kamera saatavilla, yhdistetään ip-kameraan")
 
+# alkeellinen tunnistin, ohjelman käynnistämistä, kokeilua varten
+tunnistin = cv2.CascadeClassifier('custom-cascades\cascadetest.xml')
 while True:
     ret, frame = cap.read()
+    #tunnistimen hienosäätö
+    objekti = tunnistin.detectMultiScale(frame, 1.1, 4)
+    #laatikon piirtäminen objektin ympärille
+    for (x, y, w, h) in objekti:
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 255), 1)
+
     cv2.imshow("objectdetection", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
